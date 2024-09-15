@@ -1,0 +1,21 @@
+---
+title: "Untitled"
+author: "Guillermo Cortés, Carolina Silva, Johan Sanchez"
+date: "2024-09-15"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(paqueteMODELOS)
+data("rotacion")
+```
+
+
+
+```{r, echo = TRUE}
+library(paqueteMODELOS)
+library(dplyr)
+data("rotacion")
+glimpse(rotacion)
+```
+
