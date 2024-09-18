@@ -2,7 +2,9 @@
 title: "Untitled"
 author: "Guillermo Cortés, Carolina Silva, Johan Sanchez"
 date: "2024-09-15"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -12,10 +14,29 @@ data("rotacion")
 
 
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, warning=FALSE}
 library(paqueteMODELOS)
 library(dplyr)
 data("rotacion")
 glimpse(rotacion)
 ```
+```{r, echo = TRUE, warning=FALSE}
+rotacion$Rotación <- ifelse(rotacion$Rotación == "Si", 1, 0)
+```
+```{r, echo = TRUE, warning=FALSE}
+head(rotacion)
+```
 
+correlacion biserial:
+
+```{r, echo = TRUE, warning=FALSE}
+rotacion$Edad <- as.numeric(rotacion$Edad)
+resultado <- cor.test(rotacion$Edad, rotacion$Rotación)
+print(resultado)
+```
+```{r, echo = TRUE, warning=FALSE}
+
+```
+```{r, echo = TRUE, warning=FALSE}
+
+```

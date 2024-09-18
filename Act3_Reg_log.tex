@@ -179,4 +179,59 @@
 ## $ Años_acargo_con_mismo_jefe  <dbl> 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, ~
 \end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rotacion}\SpecialCharTok{$}\NormalTok{Rotación }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(rotacion}\SpecialCharTok{$}\NormalTok{Rotación }\SpecialCharTok{==} \StringTok{"Si"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(rotacion)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 24
+##   Rotación  Edad `Viaje de Negocios` Departamento Distancia_Casa Educación
+##      <dbl> <dbl> <chr>               <chr>                 <dbl>     <dbl>
+## 1        1    41 Raramente           Ventas                    1         2
+## 2        0    49 Frecuentemente      IyD                       8         1
+## 3        1    37 Raramente           IyD                       2         2
+## 4        0    33 Frecuentemente      IyD                       3         4
+## 5        0    27 Raramente           IyD                       2         1
+## 6        0    32 Frecuentemente      IyD                       2         2
+## # i 18 more variables: Campo_Educación <chr>, Satisfacción_Ambiental <dbl>,
+## #   Genero <chr>, Cargo <chr>, Satisfación_Laboral <dbl>, Estado_Civil <chr>,
+## #   Ingreso_Mensual <dbl>, Trabajos_Anteriores <dbl>, Horas_Extra <chr>,
+## #   Porcentaje_aumento_salarial <dbl>, Rendimiento_Laboral <dbl>,
+## #   Años_Experiencia <dbl>, Capacitaciones <dbl>,
+## #   Equilibrio_Trabajo_Vida <dbl>, Antigüedad <dbl>, Antigüedad_Cargo <dbl>,
+## #   Años_ultima_promoción <dbl>, Años_acargo_con_mismo_jefe <dbl>
+\end{verbatim}
+
+correlacion biserial:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rotacion}\SpecialCharTok{$}\NormalTok{Edad }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(rotacion}\SpecialCharTok{$}\NormalTok{Edad)}
+\NormalTok{resultado }\OtherTok{\textless{}{-}} \FunctionTok{cor.test}\NormalTok{(rotacion}\SpecialCharTok{$}\NormalTok{Edad, rotacion}\SpecialCharTok{$}\NormalTok{Rotación)}
+\FunctionTok{print}\NormalTok{(resultado)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Pearson's product-moment correlation
+## 
+## data:  rotacion$Edad and rotacion$Rotación
+## t = -6.1796, df = 1468, p-value = 8.31e-10
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.2086566 -0.1089876
+## sample estimates:
+##        cor 
+## -0.1592278
+\end{verbatim}
+
 \end{document}
