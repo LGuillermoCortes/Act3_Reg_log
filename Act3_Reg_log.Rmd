@@ -38,5 +38,6 @@ print(resultado)
 
 ```
 ```{r, echo = TRUE, warning=FALSE}
+summary(rotacion$Edad)
 
 ```
