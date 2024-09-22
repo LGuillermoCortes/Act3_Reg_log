@@ -38,6 +38,39 @@ print(resultado)
 
 ```
 ```{r, echo = TRUE, warning=FALSE}
-summary(rotacion$Edad)
+estadisticas <- rotacion %>%
+  summarise(
+    Edad_media = mean(Edad, na.rm = TRUE),
+    Edad_sd = sd(Edad, na.rm = TRUE),
+    Ingreso_mensual_media = mean(Ingreso_Mensual, na.rm = TRUE),
+    Ingreso_mensual_sd = sd(Ingreso_Mensual, na.rm = TRUE),
+    Porcentaje_aumento_salarial_media = mean(Porcentaje_aumento_salarial, na.rm = TRUE),
+    Porcentaje_aumento_salarial_sd = sd(Porcentaje_aumento_salarial, na.rm = TRUE),
+    Antigüedad_cargo_media = mean(Antigüedad_Cargo, na.rm = TRUE),
+    Antigüedad_cargo_sd = sd(Antigüedad_Cargo, na.rm = TRUE)
+  )
+print(estadisticas)
 
+```
+```{r, echo = TRUE, warning=FALSE}
+ggplot(rotacion, aes(x = Edad)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(title = "Histograma de Edad", x = "Edad", y = "Frecuencia")
+```{r, echo = TRUE, warning=FALSE}
+
+```
+```{r, echo = TRUE, warning=FALSE}
+ggplot(rotacion, aes(y = Ingreso_Mensual)) +
+  geom_boxplot(fill = "green", color = "black") +
+  labs(title = "Boxplot de Ingreso Mensual", y = "Ingreso Mensual")
+```
+```{r, echo = TRUE, warning=FALSE}
+ggplot(rotacion, aes(x = Porcentaje_aumento_salarial)) +
+  geom_histogram(binwidth = 1, fill = "red", color = "black") +
+  labs(title = "Histograma de Porcentaje de Aumento Salarial", x = "Porcentaje de Aumento Salarial", y = "Frecuencia")
+```
+```{r, echo = TRUE, warning=FALSE}
+ggplot(rotacion, aes(y = Antigüedad_Cargo)) +
+  geom_boxplot(fill = "purple", color = "black") +
+  labs(title = "Boxplot de Antigüedad en el Cargo", y = "Antigüedad en el Cargo")
 ```
