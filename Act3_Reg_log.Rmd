@@ -74,3 +74,51 @@ ggplot(rotacion, aes(y = Antigüedad_Cargo)) +
   geom_boxplot(fill = "purple", color = "black") +
   labs(title = "Boxplot de Antigüedad en el Cargo", y = "Antigüedad en el Cargo")
 ```
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+
+```{r, echo = TRUE, warning=FALSE}
+
+```
+
+
+
+
+
+
+
+
