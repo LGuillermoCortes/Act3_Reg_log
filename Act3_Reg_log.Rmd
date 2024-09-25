@@ -17,12 +17,14 @@ data("rotacion")
 ```{r, echo = TRUE, warning=FALSE}
 library(paqueteMODELOS)
 library(dplyr)
+library(caret)
 data("rotacion")
 glimpse(rotacion)
 ```
 ```{r, echo = TRUE, warning=FALSE}
 rotacion$Rotación <- ifelse(rotacion$Rotación == "Si", 1, 0)
 ```
+
 ```{r, echo = TRUE, warning=FALSE}
 head(rotacion)
 ```
@@ -56,34 +58,55 @@ print(estadisticas)
 ggplot(rotacion, aes(x = Edad)) +
   geom_histogram(binwidth = 5, fill = "blue", color = "black") +
   labs(title = "Histograma de Edad", x = "Edad", y = "Frecuencia")
-```{r, echo = TRUE, warning=FALSE}
-
 ```
+
 ```{r, echo = TRUE, warning=FALSE}
 ggplot(rotacion, aes(y = Ingreso_Mensual)) +
   geom_boxplot(fill = "green", color = "black") +
   labs(title = "Boxplot de Ingreso Mensual", y = "Ingreso Mensual")
 ```
+
 ```{r, echo = TRUE, warning=FALSE}
 ggplot(rotacion, aes(x = Porcentaje_aumento_salarial)) +
   geom_histogram(binwidth = 1, fill = "red", color = "black") +
   labs(title = "Histograma de Porcentaje de Aumento Salarial", x = "Porcentaje de Aumento Salarial", y = "Frecuencia")
 ```
+
 ```{r, echo = TRUE, warning=FALSE}
 ggplot(rotacion, aes(y = Antigüedad_Cargo)) +
   geom_boxplot(fill = "purple", color = "black") +
   labs(title = "Boxplot de Antigüedad en el Cargo", y = "Antigüedad en el Cargo")
 ```
 ```{r, echo = TRUE, warning=FALSE}
-
+summary(rotacion)
 ```
 
 ```{r, echo = TRUE, warning=FALSE}
+colSums(is.na(rotacion))
 
+```
+```{r, echo = TRUE, warning=FALSE}
+sum(is.na(rotacion$Satisfacción_Laboral))
+dataset <- dataset[!is.na(dataset$Satisfacción_Laboral), ]
 ```
 
 ```{r, echo = TRUE, warning=FALSE}
+rotacion$Educación <- as.factor(rotacion$Educación)
+rotacion$Satisfacción_ambiental <- as.factor(rotacion$Satisfacción_Ambiental)
+rotacion$Satisfacción_laboral <- as.factor(rotacion$Satisfacción_Laboral)
+rotacion$Rendimiento_laboral <- as.factor(rotacion$Rendimiento_Laboral)
+rotacion$Equilibrio_trabajo_vida <- as.factor(rotacion$Equilibrio_Trabajo_Vida)
+```
 
+```{r, echo = TRUE, warning=FALSE}
+set.seed(123)  # Fijar semilla para reproducibilidad
+trainIndex <- createDataPartition(rotacion$Rotación, p = 0.7, list = FALSE)
+train_rota <- rotacion[trainIndex, ]
+test_rota <- rotacion[-trainIndex, ]
+```
+
+```{r, echo = TRUE, warning=FALSE}
+model <- train(rotacion ~ ., data = train_rota, method = "glm", family = binomial())
 ```
 
 ```{r, echo = TRUE, warning=FALSE}
