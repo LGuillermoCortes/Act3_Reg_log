@@ -9,18 +9,26 @@ output:
 
 ```{r setup, include=FALSE}
 library(paqueteMODELOS)
+library(VIM)
+library(dplyr)
+library(SMOTEWB)
 data("rotacion")
 ```
 
 
 
 ```{r, echo = TRUE, warning=FALSE}
-library(paqueteMODELOS)
-library(dplyr)
-library(caret)
-data("rotacion")
-glimpse(rotacion)
+# Instalar y cargar el paquete VIM
+#install.packages("VIM")
+
+
+# Visualizar los valores faltantes
+aggr(rotacion, col = c('navyblue', 'red'), numbers = TRUE, sortVars = TRUE, labels = names(rotacion), cex.axis = .7, gap = 3, ylab = c("Histogram of missing data", "Pattern"))
 ```
+```{r, echo = TRUE, warning=FALSE}
+summary(rotacion)
+```
+
 ```{r, echo = TRUE, warning=FALSE}
 rotacion$Rotación <- ifelse(rotacion$Rotación == "Si", 1, 0)
 ```
@@ -29,31 +37,23 @@ rotacion$Rotación <- ifelse(rotacion$Rotación == "Si", 1, 0)
 head(rotacion)
 ```
 
-correlacion biserial:
+
 
 ```{r, echo = TRUE, warning=FALSE}
-rotacion$Edad <- as.numeric(rotacion$Edad)
-resultado <- cor.test(rotacion$Edad, rotacion$Rotación)
-print(resultado)
+# Convertir Ingreso_Mensual en una variable categórica
+rotacion$Satisfación_Laboral_cat <- cut(rotacion$Satisfación_Laboral, breaks = 5)
+
+# Tabla de contingencia
+tabla <- table(rotacion$Satisfación_Laboral_cat, rotacion$Rotación)
+
+# Prueba de Chi-cuadrado
+chisq.test(tabla)
 ```
 ```{r, echo = TRUE, warning=FALSE}
 
 ```
-```{r, echo = TRUE, warning=FALSE}
-estadisticas <- rotacion %>%
-  summarise(
-    Edad_media = mean(Edad, na.rm = TRUE),
-    Edad_sd = sd(Edad, na.rm = TRUE),
-    Ingreso_mensual_media = mean(Ingreso_Mensual, na.rm = TRUE),
-    Ingreso_mensual_sd = sd(Ingreso_Mensual, na.rm = TRUE),
-    Porcentaje_aumento_salarial_media = mean(Porcentaje_aumento_salarial, na.rm = TRUE),
-    Porcentaje_aumento_salarial_sd = sd(Porcentaje_aumento_salarial, na.rm = TRUE),
-    Antigüedad_cargo_media = mean(Antigüedad_Cargo, na.rm = TRUE),
-    Antigüedad_cargo_sd = sd(Antigüedad_Cargo, na.rm = TRUE)
-  )
-print(estadisticas)
 
-```
+
 ```{r, echo = TRUE, warning=FALSE}
 ggplot(rotacion, aes(x = Edad)) +
   geom_histogram(binwidth = 5, fill = "blue", color = "black") +
@@ -77,36 +77,45 @@ ggplot(rotacion, aes(y = Antigüedad_Cargo)) +
   geom_boxplot(fill = "purple", color = "black") +
   labs(title = "Boxplot de Antigüedad en el Cargo", y = "Antigüedad en el Cargo")
 ```
-```{r, echo = TRUE, warning=FALSE}
-summary(rotacion)
-```
 
-```{r, echo = TRUE, warning=FALSE}
-colSums(is.na(rotacion))
-
-```
-```{r, echo = TRUE, warning=FALSE}
-sum(is.na(rotacion$Satisfacción_Laboral))
-dataset <- dataset[!is.na(dataset$Satisfacción_Laboral), ]
-```
 
 ```{r, echo = TRUE, warning=FALSE}
 rotacion$Educación <- as.factor(rotacion$Educación)
 rotacion$Satisfacción_ambiental <- as.factor(rotacion$Satisfacción_Ambiental)
-rotacion$Satisfacción_laboral <- as.factor(rotacion$Satisfacción_Laboral)
+#rotacion$Satisfacción_laboral <- as.factor(rotacion$Satisfacción_Laboral)
 rotacion$Rendimiento_laboral <- as.factor(rotacion$Rendimiento_Laboral)
 rotacion$Equilibrio_trabajo_vida <- as.factor(rotacion$Equilibrio_Trabajo_Vida)
 ```
 
 ```{r, echo = TRUE, warning=FALSE}
+table(rotacion$Rotación)
+```
+```{r, echo = TRUE, warning=FALSE}
+class(rotacion)
+```
+```{r, echo = TRUE, warning=FALSE}
+# Eliminar filas con valores faltantes
+rotacion <- na.omit(rotacion)
+rotacion <- as.data.frame(rotacion)
+```
+
+
+
+```{r, echo = TRUE, warning=FALSE}
+rotacion_balanced <- SMOTEWB(Rotación ~ ., data = rotacion, perc.over = 200, perc.under = 100)
+table(rotacion_balanced$Rotación)
+```
+
+
+```{r, echo = TRUE, warning=FALSE}
 set.seed(123)  # Fijar semilla para reproducibilidad
 trainIndex <- createDataPartition(rotacion$Rotación, p = 0.7, list = FALSE)
-train_rota <- rotacion[trainIndex, ]
-test_rota <- rotacion[-trainIndex, ]
+train_rotacion <- rotacion[trainIndex, ]
+test_rotacion <- rotacion[-trainIndex, ]
 ```
 
 ```{r, echo = TRUE, warning=FALSE}
-model <- train(rotacion ~ ., data = train_rota, method = "glm", family = binomial())
+model <- train(rotacion ~ ., data = train_rotacion, method = "glm", family = binomial())
 ```
 
 ```{r, echo = TRUE, warning=FALSE}
